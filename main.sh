@@ -4,4 +4,6 @@
 
 current_path=$(dirname $0)
 
-echo $current_path
+# Импорт функций
+
+source $current_path/logging/*
