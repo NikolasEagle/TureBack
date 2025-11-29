@@ -17,7 +17,7 @@ logging() {
 
     if [[ -n $err ]]; then
         echo "$(get_date) $(get_hostname) [ERROR]: $err" >> $logs_path
-        set -e
+        exit 1
     elif [[ -z $err && $backup_completed ]]; then
         echo "$(get_date) $(get_hostname) [INFO]: Success!" >> $logs_path
     fi    
