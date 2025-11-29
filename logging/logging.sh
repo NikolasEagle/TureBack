@@ -8,12 +8,18 @@ get_hostname() {
     hostname
 }
 
-get_message() {
-    if $1; then
-        echo "[INFO]:"
-    else
-        echo "[ERROR]:"
-    fi
+logging() {
+    local command=$1
+    local logs_path=$2
+    local backup_completed=$3
+
+    local err=$($command 2>&1)
+
+    if [[ -n $err ]]; then
+        echo "$(get_date) $(get_hostname) [ERROR]: $err" >> $logs_path
+    elif [[ -z $err && $backup_completed ]]; then
+        echo "$(get_date) $(get_hostname) [INFO]: Success!" >> $logs_path
+    fi    
 }
 
-export -f get_date get_hostname get_message
+export -f logging
