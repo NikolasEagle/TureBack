@@ -1,19 +1,19 @@
 # Импортирование функции работы с датой
 
-source $(dirname $0)/date.sh
+source $(dirname $0)/funcs/date.sh
 
 logging() {
     local command=$1
     local logs_path=$2
     local backup_completed=$3
 
-    local err=$($command 2>&1)
+    local err=$(eval $command 2>&1)
 
     if [[ -n $err ]]; then
-        echo "$(get_date) $(hostname) [ERROR]: $err" >> $logs_path
+        echo "$(get_date "journal") $(hostname) [ERROR]: $err" | tee -a $logs_path
         exit 1
     elif [[ -z $err && $backup_completed ]]; then
-        echo "$(get_date) $(hostname) [INFO]: Success!" >> $logs_path
+        echo "$(get_date "journal") $(hostname) [INFO]: Success!" | tee -a $logs_path
     fi    
 }
 
