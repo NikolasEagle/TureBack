@@ -22,15 +22,15 @@ backuping() {
 
     # Подсчет количества копий в целевой директории
 
-    count_backup_files_in_folder=$(find $backup_path -name ".img.lz4" | wc -l)
+    count_backup_files_in_folder=$(find $backup_path -name "*.img.lz4" | wc -l)
 
     # Удаление старой копии при превышении количества копий в папке необходимого числа
 
-    if [[ $count_backup_files_in_folder -gt $count_backup_files ]]; then
-        logging "ls -t | tail -n 1 | xargs rm" $logs_path false
+    if [ $count_backup_files_in_folder -ge $count_backup_files ]; then
+        logging "find $backup_path -name "*.img.lz4" | sort -r | tail -n $(($count_backup_files_in_folder - $count_backup_files + 1)) | xargs rm" $logs_path false
     fi
 
     # Клонирование диска и сжатие резервной копии в целевую директорию
 
-    logging "dd if=$disk | lz4 -$compression_ratio > $backup_path/$(gen_filename)" $logs_path false
+    logging "dd if=$disk | lz4 -$compression_ratio > $backup_path/$(gen_filename)" $logs_path true
 }
