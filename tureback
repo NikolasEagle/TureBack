@@ -6,6 +6,11 @@ source $(dirname $0)/main.sh
 
 # Чтение флагов
 
+require_backup_path=0
+require_count_backup_files=0
+require_disk=0
+require_compression_ratio=0
+
 usage() {
     echo "Usage: $0 
     [-o backup_path] 
@@ -21,15 +26,19 @@ while getopts ":o:n:d:c:" opt; do
     case $opt in
         o)
             backup_path=$OPTARG
+            require_backup_path=1
             ;;
         n)
             count_backup_files=$OPTARG
+            require_count_backup_files=1
             ;;
         d)
             disk=$OPTARG
+            require_disk=1
             ;;
         c)
             compression_ratio=$OPTARG
+            require_compression_ratio=1
             ;;            
         \?)
             echo "Error: Invalid option -$OPTARG" >&2
@@ -42,9 +51,32 @@ while getopts ":o:n:d:c:" opt; do
     esac
 done
 
-# Проверка, если getopts не обработал никаких флагов
+# Проверка, если не было передано нни одного флага
+
 if [ "$OPTIND" -eq 1 ]; then
-    echo "Error: Requires at least one argument" >&2
+    echo "Error: Requires at least one option" >&2
+    usage
+fi
+
+# Проверка на передачу обязательных флагов
+
+if [[ $require_backup_path -eq 0 ]]; then
+    echo "Error: Option -o is required" >&2
+    usage
+fi
+
+if [[ $require_count_backup_files -eq 0 ]]; then
+    echo "Error: Option -n is required" >&2
+    usage
+fi
+
+if [[ $require_disk -eq 0 ]]; then
+    echo "Error: Option -d is required" >&2
+    usage
+fi
+
+if [[ $require_compression_ratio -eq 0 ]]; then
+    echo "Error: Option -c is required" >&2
     usage
 fi
 
