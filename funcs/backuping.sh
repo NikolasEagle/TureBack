@@ -1,6 +1,6 @@
 # Импортирование функции работы с датой
 
-source $(dirname $0)/date.sh
+source $(dirname $0)/*
 
 gen_filename() {
     echo "$(get_date)_$(hostname).img.lz4"
@@ -11,6 +11,13 @@ backuping() {
     local count_backup_files=$2
     local disk=$3
     local compression_ratio=$4
+    local logs_path=$5
+
+    # Проверка наличия целевой директории
+
+    if ! [[ -d $backup_path ]]; then
+        logging "mkdir $backup_path" $logs_path false
+    fi
 
     # Подсчет количества копий в целевой директории
 
@@ -19,10 +26,10 @@ backuping() {
     # Удаление старой копии при превышении количества копий в папке необходимого числа
 
     if [[ $count_backup_files_in_folder -gt $count_backup_files ]]; then
-        ls -t | tail -n 1 | xargs rm
+        logging "ls -t | tail -n 1 | xargs rm" $logs_path false
     fi
 
     # Клонирование диска и сжатие резервной копии в целевую директорию
 
-    dd if=$disk | lz4 -$compression_ratio > $backup_path/$(gen_filename)
+    logging "dd if=$disk | lz4 -$compression_ratio > $backup_path/$(gen_filename)" $logs_path false
 }
