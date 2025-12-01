@@ -1,9 +1,10 @@
-# Импортирование функции работы с датой
+# Импортирование функций
 
-source $(dirname $0)/*
+source $(dirname $0)/funcs/logging.sh
+source $(dirname $0)/funcs/date.sh
 
 gen_filename() {
-    echo "$(get_date)_$(hostname).img.lz4"
+    echo "$(get_date "file")_$(hostname).img.lz4"
 }
 
 backuping() {
