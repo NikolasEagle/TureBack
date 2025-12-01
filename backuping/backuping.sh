@@ -9,7 +9,7 @@ backuping() {
 
     # Удаление старой копии при превышении количества копий в папке необходимого числа
 
-    if [[ $count_backup_files_in_folder -ge $count_backup_files ]]; then
+    if [[ $count_backup_files_in_folder -gt $count_backup_files ]]; then
         ls -t | tail -n 1 | xargs rm
     fi
 }

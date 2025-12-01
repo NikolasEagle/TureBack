@@ -1,9 +1,3 @@
-#!/bin/bash
-
-get_date() {
-    date +"%b %d %H:%M:%S";
-}
-
 logging() {
     local command=$1
     local logs_path=$2
