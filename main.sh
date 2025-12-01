@@ -6,7 +6,7 @@ current_path=$(dirname $0)
 
 # Импорт функций
 
-source $current_path/logging/*
+source $current_path/funcs/*
 
 # Чтение флагов
 

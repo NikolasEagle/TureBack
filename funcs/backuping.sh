@@ -1,3 +1,11 @@
+# Импортирование функции работы с датой
+
+source $(dirname $0)/date.sh
+
+gen_filename() {
+    echo "$(get_date)_$(hostname).img.lzo"
+}
+
 backuping() {
     local backup_path=$1
     local count_backup_files=$2

@@ -1,3 +1,7 @@
+# Импортирование функции работы с датой
+
+source $(dirname $0)/date.sh
+
 logging() {
     local command=$1
     local logs_path=$2
