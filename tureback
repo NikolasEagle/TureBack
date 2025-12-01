@@ -1,36 +1,53 @@
 #!/bin/bash
 
+# Импортирование главного файла скрипта
+
+source $(dirname $0)/main.sh
+
 # Чтение флагов
 
 usage() {
     echo "Usage: $0 
     [-o backup_path] 
     [-n count_backup_files] 
-    [-d disk]"
+    [-d disk]
+    [-c compression_ratio]"
     exit 1
 }
 
-while getopts ":o:n:d:" opt; do
+OPTIND=1 # Сброс OPTIND для корректной работы в разных окружениях
+
+while getopts ":o:n:d:c:" opt; do
     case $opt in
         o)
-            echo "Backup Path: $OPTARG"
+            backup_path=$OPTARG
             ;;
         n)
-            echo "Count Backup Files: $OPTARG"
+            count_backup_files=$OPTARG
             ;;
         d)
-            echo "Disk: $OPTARG"
+            disk=$OPTARG
             ;;
         c)
-            echo "Compression ratio: $OPTARG"
+            compression_ratio=$OPTARG
             ;;            
         \?)
             echo "Error: Invalid option -$OPTARG" >&2
             usage
             ;;
         :)
-            echo "Error: Option -$OPTARG requires an argument." >&2
+            echo "Error: Option -$OPTARG requires an argument" >&2
             usage
             ;;
     esac
 done
+
+# Проверка, если getopts не обработал никаких флагов
+if [ "$OPTIND" -eq 1 ]; then
+    echo "Error: Requires at least one argument" >&2
+    usage
+fi
+
+# Запуск главного файла скрипта
+
+main $backup_path $count_backup_files $disk $compression_ratio
