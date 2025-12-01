@@ -53,7 +53,7 @@ done
 
 # Проверка, если не было передано нни одного флага
 
-if [ "$OPTIND" -eq 1 ]; then
+if [ $OPTIND -eq 1 ]; then
     echo "Error: Requires at least one option" >&2
     usage
 fi
