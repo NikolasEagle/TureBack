@@ -1,3 +1,0 @@
-error() {}
-
-export -f error
