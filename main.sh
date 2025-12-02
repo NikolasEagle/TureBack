@@ -1,3 +1,7 @@
+# Изменение параметров оболочки исполняемого сценария
+
+set -euo pipefail
+
 # Импорт функций
 
 source $(dirname $0)/funcs/backuping.sh
