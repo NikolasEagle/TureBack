@@ -26,9 +26,7 @@ backuping() {
 
     # Проверка наличия считываемого диска или раздела
 
-    device=$(echo $disk | sed 's|^/dev/||')
-
-    if ! $(lsblk 2>&1 | grep -q $device); then
+    if ! [ -b $disk ]; then
         logging "ERROR" "Error: Source disk or partition does not exist" $logs_path
         exit 1
     fi
