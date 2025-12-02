@@ -2,6 +2,7 @@
 
 source $(dirname $0)/funcs/logging.sh
 source $(dirname $0)/funcs/date.sh
+source $(dirname $0)/funcs/check_package.sh
 
 gen_filename() {
     echo "$(get_date "file")_$(hostname).img.lz4"
@@ -33,25 +34,7 @@ backuping() {
 
     # Проверка наличия пакета lz4 для сжатия
 
-    os_name=$(grep "^ID=" /etc/os-release | sed 's/^ID=//')
-
-    if [[ $os_name == "ubuntu" ]] || [[ $os_name == "debian" ]]; then
-        if ! $(dpkg -l lz4 2>&1 | grep -q "ii"); then
-            apt install lz4 -y
-            if [ $? -ne 0 ]; then
-                logging "ERROR" "Error: Packet lz4 can't be installed" $logs_path
-                exit 1
-            fi
-        fi
-    elif [ $os_name == "alpine" ]; then
-        if ! $(apk info --installed lz4 > /dev/null 2>&1); then
-            apk add lz4
-            if [ $? -ne 0 ]; then
-                logging "ERROR" "Error: Packet lz4 can't be installed" $logs_path
-                exit 1
-            fi
-        fi
-    fi
+    check_package "lz4"
 
     # Подсчет количества копий в целевой директории
 
