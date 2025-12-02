@@ -1,18 +1,14 @@
 check_package() {
     local package=$1
-
-    # Текст ошибки при невозможности установки пакета
-
-    local err="Error: Packet $package can't be installed"
     
     # Проверяем, какая система
 
     if command -v apt >/dev/null 2>&1; then
         # Debian/Ubuntu
-        if ! $(apt list --installed $package > /dev/null 2>&1); then
+        if ! $(command -v $package >/dev/null 2>&1); then
             apt install $package -y
             if [ $? -ne 0 ]; then
-                logging "ERROR" $err $logs_path
+                logging "ERROR" "Error: Packet $package can't be installed" $logs_path
                 exit 1
             fi
         fi
@@ -22,7 +18,7 @@ check_package() {
         if ! $(dnf list installed $package >/dev/null 2>&1); then
             dnf install -y $package
             if [ $? -ne 0 ]; then
-                logging "ERROR" $err $logs_path
+                logging "ERROR" "Error: Packet $package can't be installed" $logs_path
                 exit 1
             fi
         fi
@@ -32,7 +28,7 @@ check_package() {
         if ! $(pacman -Qi $package >/dev/null 2>&1); then
             pacman -S --noconfirm $package
             if [ $? -ne 0 ]; then
-                logging "ERROR" $err $logs_path
+                logging "ERROR" "Error: Packet $package can't be installed" $logs_path
                 exit 1
             fi
         fi
@@ -42,7 +38,7 @@ check_package() {
         if ! $(zypper se -i $package >/dev/null 2>&1); then
             zypper install -y $package
             if [ $? -ne 0 ]; then
-                logging "ERROR" $err $logs_path
+                logging "ERROR" "Error: Packet $package can't be installed" $logs_path
                 exit 1
             fi
         fi
@@ -52,13 +48,13 @@ check_package() {
          if ! $(apk info --installed lz4 > /dev/null 2>&1); then
             apk add $package
             if [ $? -ne 0 ]; then
-                logging "ERROR" $err $logs_path
+                logging "ERROR" "Error: Packet $package can't be installed" $logs_path
                 exit 1
             fi
         fi
         
     else
-        logging "ERROR" "$err. Unable to determine package manager" $logs_path
+        logging "ERROR" "Error: Packet $package can't be installed. Unable to determine package manager" $logs_path
         exit 1
     fi
 }
