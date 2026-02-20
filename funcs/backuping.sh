@@ -43,7 +43,7 @@ backuping() {
     # Удаление старой копии при превышении количества копий в папке необходимого числа
 
     if [ $count_backup_files_in_folder -ge $count_backup_files ]; then
-        ls -t | find $backup_path -name "*.img.lz4" | tail -n $(($count_backup_files_in_folder - $count_backup_files + 1)) | xargs rm
+        find . -name "*.img.lz4" -exec ls -t {} + | tail -n $(($count_backup_files_in_folder - $count_backup_files + 1)) | xargs rm
         if [ $? -ne 0 ]; then
             logging "ERROR" "Error: Old backup files into target directory could not be deleted" $logs_path
             exit 1
@@ -56,7 +56,7 @@ backuping() {
 
     if [ $? -ne 0 ]; then
         logging "ERROR" "Error: error occurred while recording" $logs_path
-        ls -t | find $backup_path -name "*.img.lz4" | head -n 1 | xargs rm
+        find . -name "*.img.lz4" -exec ls -t {} + | head -n 1 | xargs rm
         if [ $? -ne 0 ]; then
             logging "ERROR" "Error: Empty backup file into target directory could not be deleted" $logs_path
             exit 1
